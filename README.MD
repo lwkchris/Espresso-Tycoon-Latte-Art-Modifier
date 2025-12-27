@@ -1,4 +1,4 @@
-# Espresso Tycoon Custom Latte Art Tool
+# Espresso Tycoon - Latte Art Modifier
 
 This tool allows you to convert any image into a custom latte art file for the game **Espresso Tycoon**. It processes images into the required 512x512 grayscale format and places them directly into your game save folders.
 
