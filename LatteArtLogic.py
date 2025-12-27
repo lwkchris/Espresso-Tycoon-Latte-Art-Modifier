@@ -2,7 +2,7 @@ import os
 import platform
 import subprocess
 import numpy as np
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageEnhance
 
 
 class LatteArt:
@@ -30,44 +30,38 @@ class LatteArt:
         else:
             subprocess.run(["xdg-open", path])
 
-    def process_image(self, pil_img, brightness, contrast, offset, zoom):
-        # 1. Base Prep
+    def process_image(self, pil_img, brightness, contrast, offset, zoom, off_x=0, off_y=0):
+        # 1. Convert to RGBA
         img = pil_img.convert("RGBA")
-
-        # 2. Advanced Zoom/Fit Logic (Fitting Longest Side)
         width, height = img.size
-        # To show the FULL image at zoom 1.0, the canvas must be a square
-        # based on the LONGER side.
-        max_dim = max(width, height)
 
-        # Calculate the size of the square crop window
-        # zoom=1.0 means window size is max_dim (fits whole image)
-        # zoom=0.1 means window size is very small (zoomed in)
+        # 2. Logic to fit longest side
+        max_dim = max(width, height)
         crop_size = max_dim * zoom
 
-        left = (width - crop_size) / 2
-        top = (height - crop_size) / 2
-        right = (width + crop_size) / 2
-        bottom = (height + crop_size) / 2
+        # Calculate center with user drag offsets
+        # We multiply by zoom so the dragging feels consistent at different zoom levels
+        left = (width - crop_size) / 2 + (off_x * crop_size)
+        top = (height - crop_size) / 2 + (off_y * crop_size)
+        right = left + crop_size
+        bottom = top + crop_size
 
-        # Crop (PIL handle coordinates outside image by adding transparency automatically)
+        # 3. Crop and Resize (PIL handles 'out of bounds' by adding transparency)
         img = img.crop((left, top, right, bottom))
         img = img.resize((512, 512), Image.Resampling.LANCZOS)
 
-        # 3. Enhancements
+        # 4. Enhancements
         img = ImageEnhance.Brightness(img).enhance(brightness)
         img = ImageEnhance.Contrast(img).enhance(contrast)
 
-        # 4. Grayscale & Curves Math
+        # 5. Apply Curve Offset (Grayscale logic)
         alpha = img.getchannel('A')
         gray_img = img.convert("L")
-
         img_array = np.array(gray_img).astype(float)
-        img_array = img_array - offset
-        img_array = np.clip(img_array, 0, 255).astype(np.uint8)
+        img_array = np.clip(img_array - offset, 0, 255).astype(np.uint8)
         gray_img = Image.fromarray(img_array)
 
-        # 5. Finalize
+        # 6. Finalize
         final_img = gray_img.convert("RGBA")
         final_img.putalpha(alpha)
 
