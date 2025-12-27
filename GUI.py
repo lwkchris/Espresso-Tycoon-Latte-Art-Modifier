@@ -5,12 +5,11 @@ from LatteArtLogic import LatteArt
 from PIL import Image, ImageEnhance
 from tkinter import filedialog, messagebox
 
-# Default Settings
+# Default Settings Param
 default_bright = 1.8
 default_contrast = 2.4
 default_offset = 20
 default_zoom = 1.0
-
 
 class LatteArtUI(ctk.CTk):
     def __init__(self, logic_engine):
@@ -35,6 +34,17 @@ class LatteArtUI(ctk.CTk):
 
         self.setup_sidebar()
         self.setup_previews()
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def on_closing(self):
+        """Clean up resources before exiting."""            # Clear image references to free memory immediately
+        self.raw_image = None
+        self.processed_image = None
+
+        # Destroy the UI
+        self.destroy()
+        # Ensure the script exits
+        self.quit()
 
     def setup_sidebar(self):
         self.sidebar = ctk.CTkFrame(self, width=280, corner_radius=0)
@@ -211,7 +221,6 @@ class LatteArtUI(ctk.CTk):
                 messagebox.showinfo("Done", f"Latte Art Sent!\nSaved as: {filename}")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save: {e}")
-
 
 if __name__ == "__main__":
     app = LatteArtUI(LatteArt())
