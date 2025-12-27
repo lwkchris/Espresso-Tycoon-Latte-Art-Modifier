@@ -2,6 +2,20 @@
 
 This tool allows you to convert any image into a custom latte art file for the game **Espresso Tycoon**. It processes images into the required 512x512 grayscale format and places them directly into your game save folders.
 
+You can directly download here ["Espresso Tycoon - Latte Art Modifier.exe"](https://drive.google.com/file/d/1GlBtkXZ-Zl8rCAiCE7hhPgWgxRJyjfgm/view?usp=drive_link) 
+
+Capscreen:
+<p>
+<img src= "https://imgur.com/MhfPEGX.png" width="800">
+<img src= "https://imgur.com/dm9yrTr.png" width="800">
+
+<img src= "https://imgur.com/rrC8RYN.png" width="800">
+<img src= "https://imgur.com/FLZdR1f.png" width="800">
+
+<img src= "https://imgur.com/uGSfxHr.png" width="800">
+<img src= "https://imgur.com/313glHx.png" width="800">
+</p>
+
 ## ☕ Control Plane Parameters
 
 The sidebar contains several sliders to "tune" how your art will look on the coffee:
